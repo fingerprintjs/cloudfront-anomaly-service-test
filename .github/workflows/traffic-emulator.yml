@@ -18,13 +18,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # TODO Remove once CF is ready
-      - name: TEMP Run website
-        run: npm run website:serve & sleep 10
-        env:
-          VITE_FPJS_API_KEY: ${{ secrets.VITE_FPJS_API_KEY }}
-          VITE_FPJS_REGION: ${{ secrets.VITE_FPJS_REGION }}
-
       - name: Run emulator
         run: npm run traffic-emulator:run
         env:

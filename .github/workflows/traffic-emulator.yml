@@ -1,0 +1,31 @@
+name: Traffic emulator
+on:
+  workflow_dispatch:
+jobs:
+  emulator:
+    name: Traffic emulator
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup node v20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # TODO Remove once CF is ready
+      - name: TEMP Run website
+        run: npm run website:serve & sleep 10
+        env:
+          VITE_FPJS_API_KEY: ${{ secrets.VITE_FPJS_API_KEY }}
+          VITE_FPJS_REGION: ${{ secrets.VITE_FPJS_REGION }}
+
+      - name: Run emulator
+        run: npm run traffic-emulator:run
+        env:
+          WEBSITE_URL: http://localhost:4201
+

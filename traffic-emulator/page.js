@@ -41,23 +41,50 @@ export async function doRequestWithPerformanceMark(page) {
 async function waitForVerification(page) {
   await withTimeout(async () => {
     while (true) {
-      const main = await page.waitForSelector('main');
-
-      const isSuccess = await main
-        .getAttribute('data-success')
-        .then((attr) => attr === 'true');
-
-      if (isSuccess) {
-        const visitorId = await main.getAttribute('data-visitorid');
-
-        if (!visitorId) {
-          throw new Error('Visitor id is not defined');
-        }
-
+      if (await validateMainElement(page)) {
         return;
       }
 
       await wait(1000);
     }
   }, 10_000);
+}
+
+async function validateMainElement(page) {
+  const main = await page.waitForSelector('main');
+
+  const isSuccess = await main
+    .getAttribute('data-success')
+    .then((attr) => attr === 'true');
+
+  if (isSuccess) {
+    const visitorId = await main.getAttribute('data-visitorid');
+
+    if (!visitorId) {
+      throw new Error('Visitor id is not defined');
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * @param {import('playwright').Page} page
+ *
+ * @returns {Promise<boolean>}
+ * */
+async function validatePreJson(page) {
+  const pre = await page.waitForSelector('pre');
+
+  const text = await pre.textContent();
+
+  try {
+    const json = JSON.parse(text);
+
+    return Boolean(json.requestId);
+  } catch {
+    return false;
+  }
 }

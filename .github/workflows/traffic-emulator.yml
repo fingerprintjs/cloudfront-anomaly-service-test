@@ -28,5 +28,5 @@ jobs:
       - name: Run emulator
         run: npm run traffic-emulator:run
         env:
-          WEBSITE_URL: http://localhost:4201
+          WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
 

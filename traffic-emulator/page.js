@@ -41,7 +41,7 @@ export async function doRequestWithPerformanceMark(page) {
 async function waitForVerification(page) {
   await withTimeout(async () => {
     while (true) {
-      if (await validateMainElement(page)) {
+      if (await validatePreJson(page)) {
         return;
       }
 

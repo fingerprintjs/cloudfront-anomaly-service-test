@@ -43,6 +43,7 @@ async function getAverageRequestTime(probCount = 10) {
 }
 
 async function main() {
+  console.info(`Using ${config.websiteUrl} as website url`);
   console.info('Calculating average request time');
 
   const requestTime = await getAverageRequestTime();

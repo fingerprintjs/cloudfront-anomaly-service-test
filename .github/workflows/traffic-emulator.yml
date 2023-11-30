@@ -1,9 +1,6 @@
 name: Traffic emulator
 on:
   workflow_dispatch:
-  schedule:
-    # Every hour
-    - cron: '0 * * * *'
 jobs:
   emulator:
     name: Traffic emulator
